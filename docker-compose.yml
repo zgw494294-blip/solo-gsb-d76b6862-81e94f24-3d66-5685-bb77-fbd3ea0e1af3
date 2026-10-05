@@ -1,0 +1,19 @@
+services:
+  batchlog:
+    build: .
+    image: batchlog:latest
+    ports:
+      - "8000:8000"
+    environment:
+      BATCHLOG_DATA_DIR: /data
+    volumes:
+      - batchlog-data:/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  batchlog-data:
